@@ -21,7 +21,7 @@ export default {
   components: { RealDigitalForm, RealDigitalTextfield, RealDigitalButton },
   data: function () {
     return {
-      url: '/script.php',
+      url: 'https://httpbin.org/post',
       method: 'POST',
       inputs: [
         { name: 'name', value: 'myname', validation: '[a-z]+' },
@@ -37,7 +37,7 @@ export default {
         !validator(i.value, i.validation) ? this.$set(i, 'invalid', true) : this.$delete(i, 'invalid')
       })
     },
-    send () {},
+    submit () {},
     inputChange (newValue) {
 
     }
