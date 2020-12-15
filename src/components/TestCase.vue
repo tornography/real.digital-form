@@ -6,7 +6,7 @@
         v-model="input.value"
     ></real-digital-textfield>
 
-    <real-digital-button>Send</real-digital-button>
+    <real-digital-button @click="check">Send</real-digital-button>
   </real-digital-form>
 </template>
 
@@ -31,15 +31,16 @@ export default {
     }
   },
   methods: {
-    check () {
-      console.log('check')
+    check (e) {
       this.inputs.forEach(i => {
         !validator(i.value, i.validation) ? this.$set(i, 'invalid', true) : this.$delete(i, 'invalid')
       })
+      if (!this.inputs.some(i => i.invalid)) {
+        this.submit()
+      }
     },
-    submit () {},
-    inputChange (newValue) {
-
+    submit () {
+      console.log('submit form')
     }
   }
 }

@@ -30,7 +30,9 @@ export default {
   },
   methods: {
     change (e) {
+      e.preventDefault()
       this.$emit('input', e.target.value)
+      return false
     }
   },
   mounted () {

@@ -18,7 +18,6 @@ export default {
   },
   methods: {
     submit (e) {
-      console.log(e)
       e.preventDefault()
       this.$emit('submit')
     }
