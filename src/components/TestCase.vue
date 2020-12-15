@@ -1,10 +1,8 @@
 <template>
-  <real-digital-form :action="url" :method="method" @submit="check">
-    <real-digital-textfield v-for="(input, key) in inputs" :key="`input-${key}`"
-        :name="input.name"
-        :invalid="input.invalid"
-        v-model="input.value"
-    ></real-digital-textfield>
+  <real-digital-form action="https://httpbin.org/post" method="POST" @submit="check" ref="rdForm">
+    <real-digital-textfield name="name" validation="[a-z]+"></real-digital-textfield>
+    <real-digital-textfield name="phone" validation="[0-9]+"></real-digital-textfield>
+    <real-digital-textfield name="subject"></real-digital-textfield>
 
     <real-digital-button @click="check">Send</real-digital-button>
   </real-digital-form>
@@ -15,32 +13,26 @@ import RealDigitalForm from './RealDigitalForm'
 import RealDigitalTextfield from './RealDigitalTextfield'
 import RealDigitalButton from './RealDigitalButton'
 import validator from '../validator.js'
+import api from '../api.js'
 
 export default {
   name: 'TestCase',
   components: { RealDigitalForm, RealDigitalTextfield, RealDigitalButton },
   data: function () {
-    return {
-      url: 'https://httpbin.org/post',
-      method: 'POST',
-      inputs: [
-        { name: 'name', value: 'myname', validation: '[a-z]+' },
-        { name: 'phone', value: '12345', validation: '[0-9]+' },
-        { name: 'subject', value: '' }
-      ]
-    }
+    return {}
   },
   methods: {
     check (e) {
-      this.inputs.forEach(i => {
-        !validator(i.value, i.validation) ? this.$set(i, 'invalid', true) : this.$delete(i, 'invalid')
-      })
-      if (!this.inputs.some(i => i.invalid)) {
-        this.submit()
-      }
+      const textfields = this.$refs.rdForm.$children.filter(c => c.$options._componentTag === 'real-digital-textfield')
+      console.log(textfields)
     },
     submit () {
-      console.log('submit form')
+      const data = {}
+      this.inputs.forEach(i => {
+        data[i.name] = i.value
+      })
+
+      api(this.method, this.url, data)
     }
   }
 }
