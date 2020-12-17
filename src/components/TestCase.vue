@@ -50,6 +50,7 @@ export default {
 <style module>
 .error {
   color: red;
-  margin: 0 0 1em;
+  margin: -0.5em 0 1em;
+  font-size: 1.4rem;
 }
 </style>
