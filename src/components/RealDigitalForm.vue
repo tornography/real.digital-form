@@ -1,10 +1,13 @@
 <template>
-    <form :action="action" :method="method" @submit="submit">
+    <form :action="action" :method="method" @submit.prevent="submit">
         <slot></slot>
     </form>
 </template>
 
 <script>
+import validator from '../validator.js'
+import api from '../api.js'
+
 export default {
   name: 'real-digital-form',
   components: {},
@@ -16,10 +19,34 @@ export default {
       default: 'POST'
     }
   },
+  data: function () {
+    return {
+      formData: {},
+      errors: []
+    }
+  },
+  computed: {
+    textfields () { return this.$children.filter(c => c.$options._componentTag === 'real-digital-textfield') }
+  },
   methods: {
-    submit (e) {
-      e.preventDefault()
-      this.$emit('submit')
+    hasError (name) {
+      return this.errors.includes(name)
+    },
+    check () {
+      this.errors = this.textfields.filter(f => !validator(f.inputValue, f.validation)).map(f => f.name)
+    },
+    submit () {
+      this.check()
+      if (this.errors.length) {
+        console.log('there are errors', this.errors)
+      } else {
+        this.textfields.forEach(t => { this.formData[t.name] = t.inputValue })
+        this.$emit('onSubmit', this.formData)
+
+        api(this.method, this.action, this.formData).then((response) => {
+          this.$emit('onResponse', response)
+        })
+      }
     }
   }
 }

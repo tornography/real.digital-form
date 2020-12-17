@@ -1,8 +1,7 @@
 <template>
- <div :class="$style.fieldSet">
+ <div>
     <label :for="id" v-text="name" :class="$style.label"/>
-    <input :id="id" type="text" :value="value" :class="[$style.input, {[$style.errorField]: invalid}]" @input="change">
-    <div v-if="invalid" :class="$style.errorText" v-text="errorMessage" />
+    <input :id="id" type="text" v-model="inputValue" :class="$style.input" @input="change">
  </div>
 
 </template>
@@ -12,19 +11,11 @@ export default {
   name: 'real-digital-textfield',
   props: {
     name: String,
-    invalid: {
-      type: Boolean,
-      default: false
-    },
-    value: {
-      typ: String,
-      default: ''
-    }
+    validation: String
   },
   data: function () {
     return {
-      inputValue: this.value,
-      errorMessage: 'Please check this field',
+      inputValue: '',
       id: null
     }
   },
@@ -42,9 +33,6 @@ export default {
 </script>
 
 <style module>
-.fieldSet {
-  margin-bottom: 1em;
-}
 .label {
   display: block;
 }
