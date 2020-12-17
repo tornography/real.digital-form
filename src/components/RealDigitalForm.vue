@@ -34,19 +34,20 @@ export default {
     },
     check () {
       this.errors = this.textfields.filter(f => !validator(f.inputValue, f.validation)).map(f => f.name)
+      this.$emit('onError', this.errors)
     },
     submit () {
       this.check()
       if (this.errors.length) {
-        console.log('there are errors', this.errors)
-      } else {
-        this.textfields.forEach(t => { this.formData[t.name] = t.inputValue })
-        this.$emit('onSubmit', this.formData)
-
-        api(this.method, this.action, this.formData).then((response) => {
-          this.$emit('onResponse', response)
-        })
+        return
       }
+
+      this.textfields.forEach(t => { this.formData[t.name] = t.inputValue })
+      this.$emit('onSubmit', this.formData)
+
+      api(this.method, this.action, this.formData).then((response) => {
+        this.$emit('onResponse', response)
+      })
     }
   }
 }

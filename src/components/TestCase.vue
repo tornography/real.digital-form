@@ -16,7 +16,6 @@
 import RealDigitalForm from './RealDigitalForm'
 import RealDigitalTextfield from './RealDigitalTextfield'
 import RealDigitalButton from './RealDigitalButton'
-import validator from '../validator.js'
 
 export default {
   name: 'TestCase',
@@ -28,14 +27,12 @@ export default {
   },
   methods: {
     hasError (name) {
-      return this.$refs.rdForm && this.$refs.rdForm.errors.includes(name)
-      // console.log(this.$refs.rdForm)
-    },
-    check (fields) {
-      this.errors = fields.filter(f => !validator(f.value, f.validation)).map(f => f.name)
+      return this.errors.includes(name)
     }
   },
   mounted () {
+    this.$refs.rdForm.$on('onError', (errors) => { this.errors = errors })
+
     this.$refs.rdForm.$on('onSubmit', (data) => {
       // manipulate data
       data.name = data.name + '_manipulated'
@@ -53,6 +50,6 @@ export default {
 <style module>
 .error {
   color: red;
-  margin: 0;
+  margin: 0 0 1em;
 }
 </style>
